@@ -1,5 +1,5 @@
 # gb-lnn
 
-Reliable condition monitoring of rotating machinery requires both discrete fault diagnosis and continuous degradation prediction, but these tasks are usually addressed separately. Moreover, non-stationary vibration signals and stochastic noise obscure multiscale fault signatures, while conventional granular-ball clustering may disrupt temporal order. To address these issues, a Multi-Scale Granular-Ball Liquid Neural Network (GB-LNN) is proposed as a common representation and temporal-modelling framework.
+Rotating machinery health monitoring requires identifying discrete operating or fault states and predicting continuous degradation from vibration signals. However, local heterogeneity and multiscale variations in noisy, non-stationary signals challenge shared representations that preserve both state separability and degradation continuity. A multiscale granular-ball liquid neural network (GB-LNN) is proposed to represent discrete states and continuous evolution through shared granular-ball states and liquid dynamics.
 
 The code is currently being organized and will be released soon.
