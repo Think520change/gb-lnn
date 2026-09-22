@@ -179,18 +179,3 @@ Classification-only outputs include `classification_run_config.json`, `classific
 Run-to-failure results can still be replotted using the original `replot_multitask_results.py`. Static classification uses `replot_classification_results.py`, which generates classification figures only.
 
 Files inherited from the original package, including `reference_log_metrics.json`, `verification_environment.json`, `verification_test_output.txt`, and `source_change_manifest.json`, are historical records, not results from new training in this release. Refer to `INTEGRATION_REPORT.md` and `integration_verification/` for verification of this release.
-
-## Missing Training Classes in the Original LOBO Splits
-
-The original split selects validation bearings by operating condition only and does not guarantee that every training fold covers all fault classes. For example, only two bearings belong to the Cage class. If one is assigned to validation and the other to testing, no Cage samples remain in training. To preserve the original regression splits, the new three-class XJTU mode allows these folds to continue joint training and records missing classes in `classification_task_definition.json`, `classification_coverage_status.json`, and the leakage audit. It does not borrow classification training data from validation or test bearings. Classification metrics are still computed using the fixed three-class label set. These folds must not be described as closed-set experiments with complete three-class training coverage. The `legacy` mode retains the original behavior of stopping when a training class is missing.
-
-After retraining on real data, regression performance can be compared on the same test samples:
-
-```bash
-python compare_regression_runs.py \
-  --original /path/to/old/lobo_pooled_dual_head_predictions.npz \
-  --integrated /path/to/new/lobo_pooled_dual_head_predictions.npz \
-  --output regression_comparison.json
-```
-
-Keep the corresponding `.metadata.json` file alongside each NPZ file. The program first aligns samples by bearing, measurement record, and time index, then checks the ground-truth HI targets, causal baselines, current HI values, event labels, and forecast horizons. It reports the original and integrated MAE, RMSE, R², and bearing-macro-averaged errors for each horizon. By default, no error increase is allowed; tolerances can be explicitly configured with `--relative-tolerance` and `--absolute-tolerance`. The comparison is rejected if targets differ. If errors exceed the tolerances, the report is saved and the program returns exit code 1. This tool does not modify any arrays.
